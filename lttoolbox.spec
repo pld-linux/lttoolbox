@@ -2,12 +2,16 @@ Summary:	Augmented letter transducer tools for natural language processing
 Summary(pl.UTF-8):	Narzędzia do przetwarzania słów w językach naturalnych
 Name:		lttoolbox
 Version:	3.2.0
-Release:	1
+%define	subver	svn20130412
+%define	rel	1
+Release:	2.%{subver}.1
 License:	GPL v2+
 Group:		Applications/Text
 Source0:	http://downloads.sourceforge.net/apertium/%{name}-%{version}.tar.gz
 # Source0-md5:	708e7de837ed363f7103035ef2849fe4
-Patch0:		%{name}-opt.patch
+Patch0:		%{name}-svn20130412.patch
+Patch1:		%{name}-soname.patch
+Patch2:		%{name}-opt.patch
 URL:		http://wiki.apertium.org/wiki/Lttoolbox
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -58,7 +62,9 @@ Statyczna biblioteka lttoolbox.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch0 -p0
+%patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -87,14 +93,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_bindir}/lt-comp
 %attr(755,root,root) %{_bindir}/lt-expand
+%attr(755,root,root) %{_bindir}/lt-print
 %attr(755,root,root) %{_bindir}/lt-proc
 %attr(755,root,root) %{_bindir}/lt-tmxcomp
 %attr(755,root,root) %{_bindir}/lt-tmxproc
 %attr(755,root,root) %{_libdir}/liblttoolbox3-3.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblttoolbox3-3.2.so.0
+%attr(755,root,root) %ghost %{_libdir}/liblttoolbox3-3.2.so.1
 %{_datadir}/lttoolbox
 %{_mandir}/man1/lt-comp.1*
 %{_mandir}/man1/lt-expand.1*
+%{_mandir}/man1/lt-print.1*
 %{_mandir}/man1/lt-proc.1*
 %{_mandir}/man1/lt-tmxcomp.1*
 %{_mandir}/man1/lt-tmxproc.1*
