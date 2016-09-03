@@ -1,13 +1,12 @@
 Summary:	Augmented letter transducer tools for natural language processing
 Summary(pl.UTF-8):	Narzędzia do przetwarzania słów w językach naturalnych
 Name:		lttoolbox
-Version:	3.3.1
+Version:	3.3.3
 Release:	1
 License:	GPL v2+
 Group:		Applications/Text
 Source0:	http://downloads.sourceforge.net/apertium/%{name}-%{version}.tar.gz
-# Source0-md5:	d50479b2376a4839b7acac352505623e
-Patch0:		%{name}-opt.patch
+# Source0-md5:	0bfac9f5ae0f8769a75b18c3fdff827f
 URL:		http://wiki.apertium.org/wiki/Lttoolbox
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -58,7 +57,6 @@ Statyczna biblioteka lttoolbox.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__libtoolize}
