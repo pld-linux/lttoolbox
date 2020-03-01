@@ -1,16 +1,17 @@
 Summary:	Augmented letter transducer tools for natural language processing
 Summary(pl.UTF-8):	Narzędzia do przetwarzania słów w językach naturalnych
 Name:		lttoolbox
-Version:	3.3.3
+Version:	3.5.0
 Release:	1
 License:	GPL v2+
 Group:		Applications/Text
 Source0:	http://downloads.sourceforge.net/apertium/%{name}-%{version}.tar.gz
-# Source0-md5:	0bfac9f5ae0f8769a75b18c3fdff827f
+# Source0-md5:	a6c5f3dd9bd76fc9ab3691c2fa2fb6e9
 URL:		http://wiki.apertium.org/wiki/Lttoolbox
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
-BuildRequires:	libstdc++-devel
+# -std=c++14
+BuildRequires:	libstdc++-devel >= 6:5.0
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	libxml2-devel >= 1:2.6.17
 BuildRequires:	pkgconfig
@@ -34,7 +35,7 @@ Summary:	Header files for lttoolbox library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki lttoolbox
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libstdc++-devel
+Requires:	libstdc++-devel >= 6:5.0
 Requires:	libxml2-devel >= 1:2.6.17
 
 %description devel
@@ -74,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/liblttoolbox3.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -90,8 +94,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/lt-tmxcomp
 %attr(755,root,root) %{_bindir}/lt-tmxproc
 %attr(755,root,root) %{_bindir}/lt-trim
-%attr(755,root,root) %{_libdir}/liblttoolbox3-3.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblttoolbox3-3.3.so.0
+%attr(755,root,root) %{_libdir}/liblttoolbox3-3.5.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblttoolbox3-3.5.so.1
 %{_datadir}/lttoolbox
 %{_mandir}/man1/lt-comp.1*
 %{_mandir}/man1/lt-expand.1*
@@ -104,8 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblttoolbox3.so
-%{_libdir}/liblttoolbox3.la
-%{_includedir}/lttoolbox-3.3
+%{_includedir}/lttoolbox-3.5
 %{_pkgconfigdir}/lttoolbox.pc
 
 %files static
