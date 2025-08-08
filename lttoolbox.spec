@@ -1,21 +1,21 @@
 Summary:	Augmented letter transducer tools for natural language processing
 Summary(pl.UTF-8):	Narzędzia do przetwarzania słów w językach naturalnych
 Name:		lttoolbox
-Version:	3.5.0
-Release:	3
+Version:	3.8.0
+Release:	1
 License:	GPL v2+
 Group:		Applications/Text
-Source0:	http://downloads.sourceforge.net/apertium/%{name}-%{version}.tar.gz
-# Source0-md5:	a6c5f3dd9bd76fc9ab3691c2fa2fb6e9
+Source0:	https://github.com/apertium/lttoolbox/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	3a5ac66a6a3b93ee414273c5ff9d8e2d
+Patch0:		libxml2.patch
 URL:		http://wiki.apertium.org/wiki/Lttoolbox
-BuildRequires:	autoconf >= 2.52
-BuildRequires:	automake
+BuildRequires:	cmake
 # -std=c++14
 BuildRequires:	libstdc++-devel >= 6:5.0
-BuildRequires:	libtool >= 2:1.5
 BuildRequires:	libxml2-devel >= 1:2.6.17
 BuildRequires:	pkgconfig
 Requires:	libxml2 >= 1:2.6.17
+Obsoletes:	lttoolbox-static < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -44,39 +44,22 @@ Header files for lttoolbox library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki lttoolbox.
 
-%package static
-Summary:	Static lttoolbox library
-Summary(pl.UTF-8):	Statyczna biblioteka lttoolbox
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-
-%description static
-Static lttoolbox library.
-
-%description static -l pl.UTF-8
-Statyczna biblioteka lttoolbox.
-
 %prep
 %setup -q
+%patch -P0 -p1
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure
+mkdir -p build
+cd build
+%cmake ../
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/liblttoolbox3.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,19 +69,32 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README
+%doc AUTHORS README.md
+%attr(755,root,root) %{_bindir}/lsx-comp
+%attr(755,root,root) %{_bindir}/lt-append
+%attr(755,root,root) %{_bindir}/lt-apply-acx
 %attr(755,root,root) %{_bindir}/lt-comp
+%attr(755,root,root) %{_bindir}/lt-compose
 %attr(755,root,root) %{_bindir}/lt-expand
+%attr(755,root,root) %{_bindir}/lt-invert
+%attr(755,root,root) %{_bindir}/lt-merge
+%attr(755,root,root) %{_bindir}/lt-paradigm
 %attr(755,root,root) %{_bindir}/lt-print
 %attr(755,root,root) %{_bindir}/lt-proc
+%attr(755,root,root) %{_bindir}/lt-restrict
 %attr(755,root,root) %{_bindir}/lt-tmxcomp
 %attr(755,root,root) %{_bindir}/lt-tmxproc
 %attr(755,root,root) %{_bindir}/lt-trim
-%attr(755,root,root) %{_libdir}/liblttoolbox3-3.5.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblttoolbox3-3.5.so.1
+%attr(755,root,root) %{_libdir}/liblttoolbox.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblttoolbox.so.3
 %{_datadir}/lttoolbox
+%{_mandir}/man1/lsx-comp.1
+%{_mandir}/man1/lt-append.1*
 %{_mandir}/man1/lt-comp.1*
+%{_mandir}/man1/lt-compose.1*
 %{_mandir}/man1/lt-expand.1*
+%{_mandir}/man1/lt-merge.1*
+%{_mandir}/man1/lt-paradigm.1*
 %{_mandir}/man1/lt-print.1*
 %{_mandir}/man1/lt-proc.1*
 %{_mandir}/man1/lt-tmxcomp.1*
@@ -107,10 +103,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/liblttoolbox3.so
-%{_includedir}/lttoolbox-3.5
+%attr(755,root,root) %{_libdir}/liblttoolbox.so
+%{_includedir}/lttoolbox
 %{_pkgconfigdir}/lttoolbox.pc
-
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/liblttoolbox3.a
